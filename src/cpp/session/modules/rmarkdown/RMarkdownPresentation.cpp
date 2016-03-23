@@ -20,6 +20,8 @@
 
 #include <core/FileSerializer.hpp>
 
+#include <session/SessionModuleContext.hpp>
+
 using namespace rstudio::core;
 
 namespace rstudio {
@@ -56,6 +58,12 @@ json::Value itemAsJson(const SlideNavigationItem& item)
    return slideJson;
 }
 
+bool isRevealJsWithHistory(const std::string& formatName)
+{
+   return (formatName == "revealjs::revealjs_presentation") &&
+          module_context::isPackageVersionInstalled("revealjs", "0.6.1");
+}
+
 } // anonymous namespace
 
 
@@ -67,7 +75,8 @@ void ammendResults(const std::string& formatName,
    // provide slide navigation for ioslides and beamer
    if (formatName != "ioslides_presentation" &&
        formatName != "slidy_presentation" &&
-       formatName != "beamer_presentation")
+       formatName != "beamer_presentation" &&
+       !isRevealJsWithHistory(formatName))
    {
       return;
    }
@@ -198,6 +207,7 @@ void ammendResults(const std::string& formatName,
       json::Object jsonSlideNavigation;
       jsonSlideNavigation["total_slides"] = totalSlides;
       jsonSlideNavigation["anchor_parens"] = formatName == "slidy_presentation";
+      jsonSlideNavigation["anchor_slash"] = formatName == "revealjs::revealjs_presentation";
       jsonSlideNavigation["items"] = jsonSlideNavigationItems;
       resultJson["slide_navigation"] = jsonSlideNavigation;
    }

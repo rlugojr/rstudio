@@ -485,6 +485,8 @@ public class RmdOutputPanel extends SatelliteFramePanel<AnchorableFrame>
    {
       if (slideNavigation_.getUseAnchorParens())
          return "(" + index + ")"; 
+      else if (slideNavigation_.getUseAnchorSlash())
+         return "/" + index;
       else
          return "" + index;
    }

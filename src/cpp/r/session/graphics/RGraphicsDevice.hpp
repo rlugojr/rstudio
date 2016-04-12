@@ -46,6 +46,8 @@ int getWidth();
 int getHeight();
 double devicePixelRatio();
 
+void playDisplayList();
+
 // reset
 void close();
 
